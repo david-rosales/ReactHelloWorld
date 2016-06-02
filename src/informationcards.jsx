@@ -11,19 +11,19 @@ var CardManager = React.createClass({
     },
     
     changeTitle: function(event){
-        this.setState({title:event.target.value, saved:false});
+        this.setState({title:event.target.value});
     },
     
     changeDesc: function(event){
-        this.setState({desc:event.target.value, saved:false})
+        this.setState({desc:event.target.value})
     },
     
     changeUrgency: function(event){
-        this.setState({urgency:event.target.value, saved:false})
+        this.setState({urgency:event.target.value})
     },
     
     changeDetails: function(event){
-        this.setState({details:event.target.value, saved:false})
+        this.setState({details:event.target.value})
     },
     
     resetECard: function(){
@@ -95,7 +95,7 @@ var SetCard = React.createClass({
                 <div className="card-panel">
                     <h4>{this.props.title}</h4>
                     <h5>{this.props.desc}</h5>
-                    <p>Urgency: {this.props.urgency === 1 ? "Do Right Now" : this.props.urgency === 2 ? "Do Sometime Later": "Do Whenever"}</p>
+                    <p>Urgency: {this.props.urgency == 1 ? "Do Right Now" : this.props.urgency == 2 ? "Do Sometime Later": "Do Whenever"}</p>
                     <p>{this.props.details}</p>
                     <button onClick={this.delete}>Delete</button>
                 </div>
