@@ -1,13 +1,43 @@
-var setCards = new Array();
-var idNum = 0;
-
 var CardManager = React.createClass({
+    getInitialState: function(){
+      return ({
+          editableCard: (<EditableCard/>),
+          setCards: [],
+          idNum: 0
+      });  
+    },
+    
+    setEditableCard: function(card){
+        this.setState({editableCard:card});
+    },
+    
+    saveCard: function(){
+        var cards = this.state.setCards.slice(0);
+        cards.push(<SetCard key={this.state.idNum} delete={this.deleteCard} id={this.state.idNum} title={this.state.editableCard.state.title} desc={this.state.editableCard.state.desc} urgency={this.state.editableCard.state.urgency} details={this.state.editableCard.state.details}/>)
+        this.setState({setCards:cards, idNum:this.state.idNum+1});
+    },
+    
+    deleteCard: function(id){
+        var removeInd = -1;
+        for(var x = 0; x < this.state.setCards.length; x++){
+            if(id == this.state.setCards[x].props.id){
+                removeInd = x;
+                break;
+            }
+        }
+        if(removeInd >= 0){
+            var cards = this.state.setCards.slice(0);
+            cards.splice(removeInd, 1);
+            this.setState({setCards: cards});
+        }
+    },
+    
     render: function(){
         
         return (<div>
-            <div className="col s3"><EditableCard/></div>
+            <div className="col s3"><EditableCard ref={this.setEditableCard} save={this.saveCard}/></div>
             <div className="col s9">
-                {setCards}
+                {this.state.setCards}
             </div>
             </div>);
     }
@@ -15,20 +45,11 @@ var CardManager = React.createClass({
 
 var SetCard = React.createClass({
     deleteButton: function(){
-        var removeInd = -1;
-        for(var x = 0; x < setCards.length; x++){
-            if(this.props.id == setCards[x].props.id){
-                removeInd = x;
-                break;
-            }
-        }
-        if(removeInd >= 0){
-            setCards.splice(removeInd, 1);
-        }
+        this.props.delete(this.props.id);
     },
     
     render: function(){
-        return (<div className="col s3">
+        return (<div className="col s6">
                 <div className="card-panel">
                     <h4>{this.props.title}</h4>
                     <h5>{this.props.desc}</h5>
@@ -68,9 +89,7 @@ var EditableCard = React.createClass({
     },
     
     save: function(event){
-        this.setState({saved:true})
-        setCards.push(<SetCard key={idNum} id={idNum} title={this.state.title} desc={this.state.desc} urgency={this.state.urgency} details={this.state.details}/>)
-        idNum++;
+        this.props.save();
         this.reset();
     },
     
@@ -107,6 +126,5 @@ var EditableCard = React.createClass({
     }
 });
 
-setInterval(function(){
-    ReactDOM.render(<CardManager />, document.getElementById("container"));
-}, 50);
+
+ReactDOM.render(<CardManager />, document.getElementById("container"));
