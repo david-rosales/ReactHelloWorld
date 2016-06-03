@@ -55,19 +55,17 @@ var CardManager = React.createClass({
     
     clickDelete: function(id){
         var newCards = _.filter(this.state.savedCards, function(card){
-            return card.id != id;
+            return card.id !== id;
         });
         this.setState({savedCards:newCards});
         this.saveCardsInLocalStorage(newCards);
     },
     
     render: function(){
-        var setCards = []
-        for(var x=0;x<this.state.savedCards.length;x++){
-            var card = this.state.savedCards[x];
-            var setCard = (<SetCard key={card.id} id={card.id} title={card.title} desc={card.desc} urgency={card.urgency} details={card.details} delete={this.clickDelete}/>);
-            setCards.push(setCard);
-        }
+        var instance = this;
+        var setCards = this.state.savedCards.map(function(card){
+            return (<SetCard key={card.id} id={card.id} title={card.title} desc={card.desc} urgency={card.urgency} details={card.details} delete={instance.clickDelete}/>);
+        });
         return(
             <div>
                 <div className="col s3">
@@ -82,6 +80,14 @@ var CardManager = React.createClass({
 });
 
 var SetCard = React.createClass({
+    propTypes: {
+        title: React.PropTypes.string.isRequired,
+        desc: React.PropTypes.string.isRequired,
+        urgency: React.PropTypes.string.isRequired,
+        details: React.PropTypes.string.isRequired,
+        delete: React.PropTypes.func.isRequired,
+    },
+    
     delete: function(){
         this.props.delete(this.props.id);    
     },
@@ -102,6 +108,18 @@ var SetCard = React.createClass({
 });
 
 var EditableCard = React.createClass({
+    propTypes: {
+        title: React.PropTypes.string.isRequired,
+        desc: React.PropTypes.string.isRequired,
+        urgency: React.PropTypes.string.isRequired,
+        details: React.PropTypes.string.isRequired,
+        changeTitle: React.PropTypes.func.isRequired,
+        changeDesc: React.PropTypes.func.isRequired,
+        changeUrgency: React.PropTypes.func.isRequired,
+        changeDetails: React.PropTypes.func.isRequired,
+        save: React.PropTypes.func.isRequired,
+    },
+    
     render: function(){
         return(
             <div className="card-panel">
