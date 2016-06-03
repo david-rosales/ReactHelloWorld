@@ -5,8 +5,8 @@ var CardManager = React.createClass({
             desc: "Default Description",
             urgency: "",
             details: "Default Details",
-            idNum: 0,
-            savedCards: []
+            idNum: this.props.initialIdNum,
+            savedCards: this.props.cards
         });
     },
     
@@ -40,11 +40,30 @@ var CardManager = React.createClass({
         return this.state.idNum - 1;
     },
     
+    saveCard: function(card){
+        var newCards = _.concat(this.state.savedCards, card);
+        var idNum = this.state.idNum;
+        if(idNum <= id){
+            idNum = id+1;
+        }
+        this.setState({savedCards:newCards, idNum: idNum});
+    },
+    
     clickSave: function(){
         var card = new Card(this.updateId(), this.state.title, this.state.desc, this.state.urgency, this.state.details);
         var newCards = _.concat(this.state.savedCards, card);
         this.setState({savedCards: newCards});
+        this.saveCardsInLocalStorage(newCards);
         this.resetECard();
+    },
+    
+    saveCardsInLocalStorage: function(cards){
+        localStorage.clear();
+        for(var i = 0; i < cards.length; i++){
+            var card = cards[i];
+            localStorage.setItem(card.id, JSON.stringify(card));
+            
+        }
     },
     
     clickDelete: function(id){
@@ -52,6 +71,7 @@ var CardManager = React.createClass({
             return card.id != id;
         });
         this.setState({savedCards:newCards});
+        this.saveCardsInLocalStorage(newCards);
     },
     
     render: function(){
@@ -130,4 +150,17 @@ var EditableCard = React.createClass({
     }
 });
 
-ReactDOM.render(<CardManager />, document.getElementById("container"));
+$( document ).ready(function() {
+    var cards = [];
+    var largestId = 0;
+    for(var x=0;x<localStorage.length;x++){
+        var card = JSON.parse(localStorage.getItem(localStorage.key(x)));
+        cards.push(card);
+        if(card.id > largestId){
+            largestId = card.id;
+        }
+    }
+    largestId+=2;
+    var CM = (<CardManager cards={cards} initialIdNum={largestId}/>);
+    ReactDOM.render(CM, document.getElementById("container"));
+});
