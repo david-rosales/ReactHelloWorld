@@ -41,7 +41,7 @@ var CardManager = React.createClass({
     },
     
     clickSave: function(){
-        var card = new Card(this.updateId(), this.state.title, this.state.desc, this.state.urgency, this.state.details);
+        var card = {id: this.updateId(), title: this.state.title, desc: this.state.desc, urgency: this.state.urgency, details: this.state.details};
         var newCards = _.concat(this.state.savedCards, card);
         this.setState({savedCards: newCards});
         this.saveCardsInLocalStorage(newCards);
@@ -50,11 +50,7 @@ var CardManager = React.createClass({
     
     saveCardsInLocalStorage: function(cards){
         localStorage.clear();
-        for(var i = 0; i < cards.length; i++){
-            var card = cards[i];
-            localStorage.setItem(card.id, JSON.stringify(card));
-            
-        }
+        localStorage.setItem("savedCards", JSON.stringify(cards));
     },
     
     clickDelete: function(id){
@@ -84,16 +80,6 @@ var CardManager = React.createClass({
         );
     }
 });
-
-var Card = function(id, title, desc, urgency, details){
-  return ({
-      id: id,
-      title: title,
-      desc: desc,
-      urgency: urgency,
-      details: details
-  });  
-};
 
 var SetCard = React.createClass({
     delete: function(){
@@ -142,16 +128,19 @@ var EditableCard = React.createClass({
 });
 
 $( document ).ready(function() {
-    var cards = [];
+    var cards = JSON.parse(localStorage.getItem("savedCards"));
     var largestId = 0;
-    for(var x=0;x<localStorage.length;x++){
-        var card = JSON.parse(localStorage.getItem(localStorage.key(x)));
-        cards.push(card);
-        if(card.id > largestId){
-            largestId = card.id;
+    if(cards !== null){
+        for(var x=0;x<cards.length;x++){
+            var card = cards[x];
+            if(card.id > largestId){
+                largestId = card.id;
+            }
         }
+        largestId+=2;
+    }else{
+        cards=[];
     }
-    largestId+=2;
     var CM = (<CardManager cards={cards} initialIdNum={largestId}/>);
     ReactDOM.render(CM, document.getElementById("container"));
 });
