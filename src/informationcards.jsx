@@ -40,15 +40,6 @@ var CardManager = React.createClass({
         return this.state.idNum - 1;
     },
     
-    saveCard: function(card){
-        var newCards = _.concat(this.state.savedCards, card);
-        var idNum = this.state.idNum;
-        if(idNum <= id){
-            idNum = id+1;
-        }
-        this.setState({savedCards:newCards, idNum: idNum});
-    },
-    
     clickSave: function(){
         var card = new Card(this.updateId(), this.state.title, this.state.desc, this.state.urgency, this.state.details);
         var newCards = _.concat(this.state.savedCards, card);
