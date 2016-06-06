@@ -37,7 +37,7 @@ var CardManager = React.createClass({
     
     updateId: function(){
         this.setState({idNum: this.state.idNum + 1});
-        return this.state.idNum - 1;
+        return this.state.idNum;
     },
     
     clickSave: function(){
@@ -49,7 +49,6 @@ var CardManager = React.createClass({
     },
     
     saveCardsInLocalStorage: function(cards){
-        localStorage.clear();
         localStorage.setItem("savedCards", JSON.stringify(cards));
     },
     
@@ -62,14 +61,14 @@ var CardManager = React.createClass({
     },
     
     render: function(){
-        var instance = this;
         var setCards = this.state.savedCards.map(function(card){
-            return (<SetCard key={card.id} id={card.id} title={card.title} desc={card.desc} urgency={card.urgency} details={card.details} delete={instance.clickDelete}/>);
-        });
+            var setCard = (<SetCard key={card.id} id={card.id} title={card.title} desc={card.desc} urgency={card.urgency} details={card.details} delete={this.clickDelete}/>);
+            return setCard;
+        }.bind(this));
         return(
             <div>
                 <div className="col s3">
-                    <EditableCard title={this.state.title} desc={this.state.desc} urgency={this.state.urgency} details={this.state.details} changeTitle={this.changeTitle} changeDesc={this.changeDesc} changeUrgency={this.changeUrgency} changeDetails={this.changeDetails} save={this.clickSave}/>
+                    <EditableCard title={this.state.title} desc={this.state.desc} urgency={this.state.urgency} details={this.state.details} onTitleChanged={this.changeTitle} onDescriptionChanged={this.changeDesc} onUrgencyChanged={this.changeUrgency} onDetailsChanged={this.changeDetails} onSave={this.clickSave}/>
                 </div>
                 <div className="col s9">
                     {setCards}
@@ -81,6 +80,7 @@ var CardManager = React.createClass({
 
 var SetCard = React.createClass({
     propTypes: {
+        id: React.PropTypes.number.isRequired,
         title: React.PropTypes.string.isRequired,
         desc: React.PropTypes.string.isRequired,
         urgency: React.PropTypes.string.isRequired,
@@ -113,11 +113,11 @@ var EditableCard = React.createClass({
         desc: React.PropTypes.string.isRequired,
         urgency: React.PropTypes.string.isRequired,
         details: React.PropTypes.string.isRequired,
-        changeTitle: React.PropTypes.func.isRequired,
-        changeDesc: React.PropTypes.func.isRequired,
-        changeUrgency: React.PropTypes.func.isRequired,
-        changeDetails: React.PropTypes.func.isRequired,
-        save: React.PropTypes.func.isRequired,
+        onTitleChanged: React.PropTypes.func.isRequired,
+        onDescriptionChanged: React.PropTypes.func.isRequired,
+        onUrgencyChanged: React.PropTypes.func.isRequired,
+        onDetailsChanged: React.PropTypes.func.isRequired,
+        onSave: React.PropTypes.func.isRequired,
     },
     
     render: function(){
@@ -125,12 +125,12 @@ var EditableCard = React.createClass({
             <div className="card-panel">
                 <p>Title:</p>
                 <h4>{this.props.title}</h4>
-                <textarea value={this.props.title} onChange={this.props.changeTitle}></textarea>
+                <textarea value={this.props.title} onChange={this.props.onTitleChanged}></textarea>
                 <p>Description:</p>
                 <h5>{this.props.desc}</h5>
-                <textarea value={this.props.desc} onChange={this.props.changeDesc}></textarea>
+                <textarea value={this.props.desc} onChange={this.props.onDescriptionChanged}></textarea>
                 <p>Urgency:</p>
-                <select value={this.props.urgency} onChange={this.props.changeUrgency} className="browser-default">
+                <select value={this.props.urgency} onChange={this.props.onUrgencyChanged} className="browser-default">
                     <option value="" disabled>Choose an Urgency</option>
                     <option value="1">Do Right Now</option>
                     <option value="2">Do Sometime Later</option>
@@ -138,8 +138,8 @@ var EditableCard = React.createClass({
                 </select>
                 <p>Details:</p>
                 <p>{this.props.details}</p>
-                <textarea value={this.props.details} onChange={this.props.changeDetails}></textarea>
-                <button onClick={this.props.save}>Save</button>
+                <textarea value={this.props.details} onChange={this.props.onDetailsChanged}></textarea>
+                <button onClick={this.props.onSave}>Save</button>
             </div>
         );
     }
@@ -148,14 +148,9 @@ var EditableCard = React.createClass({
 $( document ).ready(function() {
     var cards = JSON.parse(localStorage.getItem("savedCards"));
     var largestId = 0;
-    if(cards !== null){
-        for(var x=0;x<cards.length;x++){
-            var card = cards[x];
-            if(card.id > largestId){
-                largestId = card.id;
-            }
-        }
-        largestId+=2;
+    if(cards !== null && cards.length > 0){
+        var mostRecentCard = _.maxBy(cards, function(card){return card.id;});
+        largestId = mostRecentCard.id + 1;
     }else{
         cards=[];
     }
