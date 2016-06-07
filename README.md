@@ -4,7 +4,7 @@ A test app using the React UI library
 ## Running locally
 
 #### OSX and Windows
-Before running for the first time, use npm retrieve all the dependencies:
+Before running for the first time, use npm in the root directory of the project to retrieve all the dependencies:
 ```
 $ npm install
 ```
