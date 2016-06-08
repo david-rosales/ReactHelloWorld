@@ -1,0 +1,27 @@
+{
+  "name": "reacthelloworld",
+  "version": "1.0.0",
+  "description": "A test app using the React UI library",
+  "main": "bundle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mit-teaching-systems-lab/ReactHelloWorld.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mit-teaching-systems-lab/ReactHelloWorld/issues"
+  },
+  "homepage": "https://github.com/mit-teaching-systems-lab/ReactHelloWorld#readme",
+  "dependencies": {
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.0.1",
+    "lodash": "^4.13.1",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0"
+  }
+}
