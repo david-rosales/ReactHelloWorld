@@ -1,6 +1,8 @@
 var React = require("react");
 var ReactDOM = require("react-dom");
 var _ = require("lodash");
+var VelocityTransitionGroup = require("velocity-react/velocity-transition-group");
+var VelocityComponent = require("velocity-react/velocity-component");
 
 var CardManager = React.createClass({
     getInitialState: function(){
@@ -99,13 +101,15 @@ var SetCard = React.createClass({
     render: function(){
         return (
             <div className="col s6">
-                <div className="card-panel">
-                    <h4>{this.props.title}</h4>
-                    <h5>{this.props.desc}</h5>
-                    <p>Urgency: {this.props.urgency == 1 ? "Do Right Now" : this.props.urgency == 2 ? "Do Sometime Later": "Do Whenever"}</p>
-                    <p>{this.props.details}</p>
-                    <button onClick={this.delete}>Delete</button>
-                </div>
+                <VelocityTransitionGroup enter={{animation: "fadeIn"}} runOnMount={true}>
+                    <div className="card-panel">
+                        <h4>{this.props.title}</h4>
+                        <h5>{this.props.desc}</h5>
+                        <p>Urgency: {this.props.urgency == 1 ? "Do Right Now" : this.props.urgency == 2 ? "Do Sometime Later": "Do Whenever"}</p>
+                        <p>{this.props.details}</p>
+                        <button onClick={this.delete}>Delete</button>
+                    </div>
+                </VelocityTransitionGroup>
             </div>
         );
     }

@@ -19,7 +19,7 @@ Finally, point your browser to http://localhost:8000/ and navigate to the file.
 
 ## Building the files
 
-#### Windows
+#### All Developer Platforms
 After making changes to the informationcards.jsx file, you will need to build it using browserify.
 
 Do this in the root directory of the project to build:
