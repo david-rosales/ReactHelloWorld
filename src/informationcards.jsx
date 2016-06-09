@@ -1,6 +1,20 @@
 var React = require("react");
 var ReactDOM = require("react-dom");
 var _ = require("lodash");
+var VelocityTransitionGroup = require("velocity-react/velocity-transition-group");
+var VelocityComponent = require("velocity-react/velocity-component");
+var velocityHelpers = require("velocity-react/velocity-helpers");
+require('velocity-animate');
+require('velocity-animate/velocity.ui');
+
+var popAnimation = velocityHelpers.registerEffect({
+    defaultDuration: 25,
+    calls: [
+        [{ translateX: [25, 0], opacity: [1, 0]}, 6],
+        [{ translateX: [-10, 25]}, 2],
+        [{ translateX: [0, -10]}, 1]
+    ],
+  });
 
 var CardManager = React.createClass({
     getInitialState: function(){
@@ -99,13 +113,15 @@ var SetCard = React.createClass({
     render: function(){
         return (
             <div className="col s6">
-                <div className="card-panel">
-                    <h4>{this.props.title}</h4>
-                    <h5>{this.props.desc}</h5>
-                    <p>Urgency: {this.props.urgency == 1 ? "Do Right Now" : this.props.urgency == 2 ? "Do Sometime Later": "Do Whenever"}</p>
-                    <p>{this.props.details}</p>
-                    <button onClick={this.delete}>Delete</button>
-                </div>
+                <VelocityComponent animation={popAnimation} runOnMount={true}>
+                    <div className="card-panel">
+                        <h4>{this.props.title}</h4>
+                        <h5>{this.props.desc}</h5>
+                        <p>Urgency: {this.props.urgency == 1 ? "Do Right Now" : this.props.urgency == 2 ? "Do Sometime Later": "Do Whenever"}</p>
+                        <p>{this.props.details}</p>
+                        <button onClick={this.delete}>Delete</button>
+                    </div>
+                </VelocityComponent>
             </div>
         );
     }
