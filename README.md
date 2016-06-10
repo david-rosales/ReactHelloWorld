@@ -24,7 +24,7 @@ After making changes to the informationcards.jsx file, you will need to build it
 
 Do this in the root directory of the project to build:
 ```
-$ browserify -t [babelify] src/informationcards.jsx -o src/bundle.js
+$ npm run build
 ```
 
 Make sure that when committing, node_modules is not accidentally staged. 
