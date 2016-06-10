@@ -27,4 +27,9 @@ Do this in the root directory of the project to build:
 $ browserify -t [babelify] src/informationcards.jsx -o src/bundle.js
 ```
 
+Another thing that could be done to build the project while in the root directory is below:
+```
+$ npm run build
+```
+
 Make sure that when committing, node_modules is not accidentally staged. 
