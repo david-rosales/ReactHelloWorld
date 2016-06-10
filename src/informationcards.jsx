@@ -89,7 +89,9 @@ var CardManager = React.createClass({
                     <EditableCard title={this.state.title} desc={this.state.desc} urgency={this.state.urgency} details={this.state.details} onTitleChanged={this.changeTitle} onDescriptionChanged={this.changeDesc} onUrgencyChanged={this.changeUrgency} onDetailsChanged={this.changeDetails} onSave={this.clickSave}/>
                 </div>
                 <div className="col s9">
-                    {setCards}
+                    <VelocityTransitionGroup enter="slideDown" leave="slideUp" runOnMount={true}>
+                        {setCards}
+                    </VelocityTransitionGroup>
                 </div>
             </div>
         );
@@ -113,15 +115,13 @@ var SetCard = React.createClass({
     render: function(){
         return (
             <div className="col s6">
-                <VelocityComponent animation={popAnimation} runOnMount={true}>
-                    <div className="card-panel">
-                        <h4>{this.props.title}</h4>
-                        <h5>{this.props.desc}</h5>
-                        <p>Urgency: {this.props.urgency == 1 ? "Do Right Now" : this.props.urgency == 2 ? "Do Sometime Later": "Do Whenever"}</p>
-                        <p>{this.props.details}</p>
-                        <button onClick={this.delete}>Delete</button>
-                    </div>
-                </VelocityComponent>
+                <div className="card-panel">
+                    <h4>{this.props.title}</h4>
+                    <h5>{this.props.desc}</h5>
+                    <p>Urgency: {this.props.urgency == 1 ? "Do Right Now" : this.props.urgency == 2 ? "Do Sometime Later": "Do Whenever"}</p>
+                    <p>{this.props.details}</p>
+                    <button onClick={this.delete}>Delete</button>
+                </div>
             </div>
         );
     }

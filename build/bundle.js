@@ -44273,7 +44273,11 @@ var CardManager = React.createClass({
             React.createElement(
                 "div",
                 { className: "col s9" },
-                setCards
+                React.createElement(
+                    VelocityTransitionGroup,
+                    { enter: "slideDown", leave: "slideUp", runOnMount: true },
+                    setCards
+                )
             )
         );
     }
@@ -44300,37 +44304,33 @@ var SetCard = React.createClass({
             "div",
             { className: "col s6" },
             React.createElement(
-                VelocityComponent,
-                { animation: popAnimation, runOnMount: true },
+                "div",
+                { className: "card-panel" },
                 React.createElement(
-                    "div",
-                    { className: "card-panel" },
-                    React.createElement(
-                        "h4",
-                        null,
-                        this.props.title
-                    ),
-                    React.createElement(
-                        "h5",
-                        null,
-                        this.props.desc
-                    ),
-                    React.createElement(
-                        "p",
-                        null,
-                        "Urgency: ",
-                        this.props.urgency == 1 ? "Do Right Now" : this.props.urgency == 2 ? "Do Sometime Later" : "Do Whenever"
-                    ),
-                    React.createElement(
-                        "p",
-                        null,
-                        this.props.details
-                    ),
-                    React.createElement(
-                        "button",
-                        { onClick: this.delete },
-                        "Delete"
-                    )
+                    "h4",
+                    null,
+                    this.props.title
+                ),
+                React.createElement(
+                    "h5",
+                    null,
+                    this.props.desc
+                ),
+                React.createElement(
+                    "p",
+                    null,
+                    "Urgency: ",
+                    this.props.urgency == 1 ? "Do Right Now" : this.props.urgency == 2 ? "Do Sometime Later" : "Do Whenever"
+                ),
+                React.createElement(
+                    "p",
+                    null,
+                    this.props.details
+                ),
+                React.createElement(
+                    "button",
+                    { onClick: this.delete },
+                    "Delete"
                 )
             )
         );
